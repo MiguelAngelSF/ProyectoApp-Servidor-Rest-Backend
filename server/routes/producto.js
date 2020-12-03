@@ -84,7 +84,7 @@ app.delete('/producto/:id', function(req, res) {
     Producto.findByIdAndUpdate(id, { disponible: false }, { new: true, runValidators: true, context: 'query' }, (err, proDB) => {
         if (err) {
             return res.status(400).json({
-                ok: true,
+                ok: false,
                 msg: 'Ocurrio un error al momento de eliminar',
                 err
             });
