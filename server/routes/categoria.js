@@ -1,5 +1,4 @@
 const express = require('express');
-const { has } = require('underscore');
 const _ = require('underscore');
 const app = express();
 const Categoria = require('../models/categoria');

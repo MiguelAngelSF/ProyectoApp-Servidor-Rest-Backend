@@ -15,7 +15,7 @@ app.get('/usuario', function(req, res) {
         .limit(Number(hasta))
         .exec((err, usuarios) => {
             if (err) {
-                return res.status(400).jason({
+                return res.status(400).json({
                     ok: false,
                     msg: 'Ocurrio un error al momento de consultar',
                     err
