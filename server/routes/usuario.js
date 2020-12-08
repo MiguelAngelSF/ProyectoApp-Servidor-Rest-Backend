@@ -32,6 +32,31 @@ app.get('/usuario', function(req, res) {
 
 
 
+app.get('/usuario/:id', function(req, res) {
+
+    let idUsuario = req.params.id;
+
+    Usuario.findById({ _id: idUsuario })
+        .exec((err, usuarios) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Ocurrio un error al momento de consultar',
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                msg: 'usuario obtenido con exito',
+                conteo: usuarios.length,
+                usuarios
+            });
+        });
+});
+
+
+
 app.post('/usuario', function(req, res) {
     let body = req.body;
     let usr = new Usuario({
@@ -99,6 +124,8 @@ app.delete('/usuario/:id', function(req, res) {
     // });
 
     let id = req.params.id;
+    console.log(req.params);
+    console.log(id);
 
     Usuario.findByIdAndUpdate(id, { estado: false }, { new: true, runValidators: true, context: 'query' }, (err, usrDB) => {
         if (err) {
