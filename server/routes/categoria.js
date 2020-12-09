@@ -30,6 +30,31 @@ app.get('/categoria', (req, res) => {
 
 });
 
+app.get('/categoria/:id', (req, res) => {
+
+    let idCategoria = req.params.id;
+
+    Categoria.findById({ _id: idCategoria })
+        .populate('usuario', 'nombre email')
+        .exec((err, categorias) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Ocurrio un error al listar las categorias',
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                msg: 'Categoria listada con exito',
+                conteo: categorias.length,
+                categorias
+            });
+        });
+
+});
+
 app.post('/categoria', (req, res) => {
     let cat = new Categoria({
         descripcion: req.body.descripcion,

@@ -30,6 +30,31 @@ app.get('/producto', function(req, res) {
         });
 });
 
+app.get('/producto/:id', function(req, res) {
+
+    let idProducto = req.params.id;
+
+    Producto.findById({ _id: idProducto })
+        .populate('usuario', 'nombre email')
+        .populate('categoria', 'descripcion')
+        .exec((err, productos) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Ocurrio un error al momento de consultar',
+                    err
+                });
+            }
+
+            res.json({
+                ok: true,
+                msg: 'Lista de productos obtenida con exito',
+                conteo: productos.length,
+                productos
+            });
+        });
+});
+
 app.post('/producto', (req, res) => {
     let pro = new Producto({
         articulo: req.body.articulo,
