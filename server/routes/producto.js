@@ -5,8 +5,8 @@ const Producto = require('../models/producto');
 
 app.get('/producto', function(req, res) {
     let desde = req.query.desde || 0;
-    let hasta = req.query.hasta || 5;
-
+    let hasta = req.query.hasta || 300;
+    //HOLA MUNDO
     Producto.find({ disponible: true })
         .skip(Number(desde))
         .limit(Number(hasta))
