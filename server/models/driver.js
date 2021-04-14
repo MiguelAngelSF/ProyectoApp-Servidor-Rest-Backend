@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 let Schema = mongoose.Schema;
 
-let usuarioSchema = new Schema({
+let driverSchema = new Schema({
     nombre: {
         type: String,
         required: [true, 'El nombre es necesario']
@@ -30,14 +30,9 @@ let usuarioSchema = new Schema({
     estado: {
         type: Boolean,
         default: true
-    }
-}, {
-    timestamps: {
-        createdAt: 'created_at',
-        updatedAt: 'updated_at'
     },
 
     //collection: "usuario"
 });
 
-module.exports = mongoose.model('Usuario', usuarioSchema);
+module.exports = mongoose.model('Driver', driverSchema);

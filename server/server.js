@@ -44,13 +44,17 @@ app.get('/', function(req, res) {
 
 app.use(require('./routes/usuario'));
 app.use(require('./routes/categoria'));
-app.use(require('./routes/producto'));
+app.use(require('./routes/viajes'));
 app.use(require('./routes/login'));
+app.use(require('./routes/registro-auto'));
+app.use(require('./routes/alertas'));
+app.use(require('./routes/driver'));
+app.use(require('./routes/cal'));
 
 
 //HOLAMUNDO
-mongoose.connect('mongodb+srv://admin:12345678ms@cluster0.74gdo.mongodb.net/cafeteria', {
-    //mongoose.connect('mongodb://localhost/cafeteria', {
+//mongoose.connect('mongodb+srv://admin:12345678ms@cluster0.74gdo.mongodb.net/proyecto', {
+mongoose.connect('mongodb://localhost/proyectoRideUTA', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,

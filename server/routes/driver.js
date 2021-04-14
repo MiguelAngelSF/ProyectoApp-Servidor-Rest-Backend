@@ -1,18 +1,18 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
-const Usuario = require('../models/usuario');
+const Driver = require('../models/driver');
 const app = express();
 
 
-app.get('/usuario', function(req, res) {
+app.get('/driver', function(req, res) {
     let desde = req.query.desde || 0;
     let hasta = req.query.hasta || 300;
 
-    Usuario.find({ estado: true })
+    Driver.find({ estado: true })
         .skip(Number(desde))
         .limit(Number(hasta))
-        .exec((err, usuarios) => {
+        .exec((err, conductores) => {
             if (err) {
                 return res.status(400).json({
                     ok: false,
@@ -24,8 +24,8 @@ app.get('/usuario', function(req, res) {
             res.json({
                 ok: true,
                 msg: 'Lista de usuarios obtenida con exito',
-                conteo: usuarios.length,
-                usuarios
+                conteo: conductores.length,
+                conductores
             });
         });
 });
@@ -53,9 +53,9 @@ app.get('/usuario/:id', function(req, res) {
         });
 });
 
-app.post('/usuario', function(req, res) {
+app.post('/driver', function(req, res) {
     let body = req.body;
-    let usr = new Usuario({
+    let dri = new Driver({
         nombre: body.nombre,
         email: body.email,
         password: body.password,
@@ -64,7 +64,7 @@ app.post('/usuario', function(req, res) {
         tipoUsuario: body.tipoUsuario
     });
 
-    usr.save((err, usrDB) => {
+    dri.save((err, driDB) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
@@ -75,14 +75,14 @@ app.post('/usuario', function(req, res) {
         res.json({
             ok: true,
             msg: 'Usuario insertado con exito',
-            usrDB
+            driDB
         });
     });
 });
 
 app.put('/usuario/:id', function(req, res) {
     let id = req.params.id;
-    let body = _.pick(req.body, ['nombre', 'email', 'password', 'genero', 'edad']);
+    let body = _.pick(req.body, ['nombre', 'email']);
 
     Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: 'query' },
         (err, usrDB) => {

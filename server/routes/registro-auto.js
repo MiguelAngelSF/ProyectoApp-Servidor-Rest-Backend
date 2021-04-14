@@ -1,18 +1,17 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
-const Usuario = require('../models/usuario');
+const Registro = require('../models/registro-auto');
 const app = express();
 
-
-app.get('/usuario', function(req, res) {
+app.get('/registro-auto', function(req, res) {
     let desde = req.query.desde || 0;
     let hasta = req.query.hasta || 300;
 
-    Usuario.find({ estado: true })
+    Registro.find({ estado: true })
         .skip(Number(desde))
         .limit(Number(hasta))
-        .exec((err, usuarios) => {
+        .exec((err, registros) => {
             if (err) {
                 return res.status(400).json({
                     ok: false,
@@ -23,19 +22,19 @@ app.get('/usuario', function(req, res) {
 
             res.json({
                 ok: true,
-                msg: 'Lista de usuarios obtenida con exito',
-                conteo: usuarios.length,
-                usuarios
+                msg: 'Lista de autos obtenida con exito',
+                conteo: registros.length,
+                registros
             });
         });
 });
 
-app.get('/usuario/:id', function(req, res) {
+app.get('/registro-auto/:id', function(req, res) {
 
-    let idUsuario = req.params.id;
+    let idRegistro = req.params.id;
 
-    Usuario.findById({ _id: idUsuario })
-        .exec((err, usuarios) => {
+    Registro.findById({ _id: idRegistro })
+        .exec((err, registros) => {
             if (err) {
                 return res.status(400).json({
                     ok: false,
@@ -46,25 +45,24 @@ app.get('/usuario/:id', function(req, res) {
 
             res.json({
                 ok: true,
-                msg: 'usuario obtenido con exito',
-                conteo: usuarios.length,
-                usuarios
+                msg: 'registro obtenido con exito',
+                conteo: registros.length,
+                registros
             });
         });
 });
 
-app.post('/usuario', function(req, res) {
+app.post('/registro-auto', function(req, res) {
     let body = req.body;
-    let usr = new Usuario({
-        nombre: body.nombre,
-        email: body.email,
-        password: body.password,
-        edad: body.edad,
-        genero: body.genero,
-        tipoUsuario: body.tipoUsuario
+    let reg = new Registro({
+        propietario: body.propietario,
+        modelo: body.modelo,
+        placas: body.placas,
+        anio: body.anio
+
     });
 
-    usr.save((err, usrDB) => {
+    reg.save((err, regDB) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
@@ -74,18 +72,18 @@ app.post('/usuario', function(req, res) {
         }
         res.json({
             ok: true,
-            msg: 'Usuario insertado con exito',
-            usrDB
+            msg: 'Auto insertado con exito',
+            regDB
         });
     });
 });
 
-app.put('/usuario/:id', function(req, res) {
+app.put('/registro-auto/:id', function(req, res) {
     let id = req.params.id;
-    let body = _.pick(req.body, ['nombre', 'email', 'password', 'genero', 'edad']);
+    let body = _.pick(req.body, ['titular', 'modelo']);
 
-    Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: 'query' },
-        (err, usrDB) => {
+    Registro.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: 'query' },
+        (err, regDB) => {
             if (err) {
                 return res.status(400).json({
                     ok: false,
@@ -95,13 +93,13 @@ app.put('/usuario/:id', function(req, res) {
             }
             res.json({
                 ok: true,
-                msg: 'Usuario actualizado con exito',
-                usuario: usrDB
+                msg: 'Auto actualizado con exito',
+                registros: regDB
             });
         });
 });
 
-app.delete('/usuario/:id', function(req, res) {
+app.delete('/registro-auto/:id', function(req, res) {
     // let id = req.params.id;
 
     // Usuario.deleteOne({ _id: id }, (err, usuarioBorrado) => {
@@ -125,7 +123,7 @@ app.delete('/usuario/:id', function(req, res) {
     console.log(req.params);
     console.log(id);
 
-    Usuario.findByIdAndUpdate(id, { estado: false }, { new: true, runValidators: true, context: 'query' }, (err, usrDB) => {
+    Registro.findByIdAndUpdate(id, { estado: false }, { new: true, runValidators: true, context: 'query' }, (err, regDB) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
@@ -135,8 +133,8 @@ app.delete('/usuario/:id', function(req, res) {
         }
         res.json({
             ok: true,
-            msg: 'Usuario eliminado con exito',
-            usrDB
+            msg: 'Registro eliminado con exito',
+            regDB
 
         });
     });
